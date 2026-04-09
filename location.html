@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PARKERZ - Location Access</title>
+  <style>
+    body {
+      margin: 0; font-family: 'Segoe UI', sans-serif;
+      background: #000; color: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center;
+    }
+    header { width: 100%; padding: 20px; text-align: center; background-color: rgba(0,0,0,0.8); font-size: 3rem; color: #4CAF50; position: absolute; top: 0; }
+    button { margin-top: 20px; padding: 12px 24px; font-size: 1rem; background: #4CAF50; border: none; color: #fff; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #388e3c; }
+  </style>
+</head>
+<body>
+  <header>PARKERZ</header>
+  <h2>We need your location to find parking spots near you.</h2>
+  <button onclick="getLocation()">Allow Location</button>
+
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            window.location.href = 'parking.html';
+          },
+          () => {
+            alert("Location is required. Please allow access.");
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by your browser.");
+      }
+    }
+  </script>
+</body>
+</html>

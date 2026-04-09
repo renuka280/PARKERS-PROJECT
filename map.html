@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PARKERZ - Parking Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%; width: 100%;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background: #000;
+      color: #4CAF50;
+      text-align: center;
+      padding: 15px;
+      font-size: 2rem;
+    }
+    #map {
+      height: calc(100% - 70px);
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>PARKERZ</header>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const vehicle = sessionStorage.getItem("vehicle"); // "Two-Wheeler" or "Four-Wheeler"
+
+    // Choose icon based on vehicle type
+    const icons = {
+      "Two-Wheeler": L.icon({
+        iconUrl: "https://img.icons8.com/ios-filled/40/scooter.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      }),
+      "Four-Wheeler": L.icon({
+        iconUrl: "https://img.icons8.com/ios-filled/40/car--v1.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      }),
+      "User": L.icon({
+        iconUrl: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      })
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const userLatLng = [position.coords.latitude, position.coords.longitude];
+
+        // Initialize map
+        const map = L.map('map').setView(userLatLng, 15);
+
+        // Set map tiles (black & white style)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Add user marker
+        L.marker(userLatLng, { icon: icons["User"] })
+          .addTo(map)
+          .bindPopup("You are here")
+          .openPopup();
+
+        // Mock nearby parking spots
+        const parkingSpots = [
+          [userLatLng[0] + 0.001, userLatLng[1] + 0.001],
+          [userLatLng[0] - 0.0015, userLatLng[1] + 0.0008],
+          [userLatLng[0], userLatLng[1] - 0.0015]
+        ];
+
+        parkingSpots.forEach((spot, i) => {
+          L.marker(spot, { icon: icons[vehicle] })
+            .addTo(map)
+            .bindPopup(`Parking Zone ${i + 1}`);
+        });
+
+      }, () => {
+        alert("Location access denied. Can't show parking map.");
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  </script>
+</body>
+</html>
