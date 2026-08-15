@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PARKERZ - Sign Up</title>
+  <style>
+    body {
+      margin: 0; font-family: 'Segoe UI', sans-serif;
+      background: url('images/bike.jpg') center/cover no-repeat #000;
+      color: #fff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; position: relative;
+    }
+    body::after { content: ''; position: absolute; inset: 0; background-color: rgba(0,0,0,0.6); z-index: 0; }
+    header { z-index: 1; width: 100%; padding: 20px; text-align: center; background-color: rgba(0,0,0,0.8); font-size: 3rem; color: #4CAF50; }
+    form { z-index: 1; margin-top: 80px; background: rgba(255,255,255,0.05); padding: 20px 30px; border-radius: 10px; backdrop-filter: blur(8px); width: 320px; text-align: center; }
+    input, button { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 4px; }
+    input { background: #fff; color: #000; }
+    button { background-color: #4CAF50; color: white; font-weight: bold; cursor: pointer; }
+    button:hover { background-color: #388e3c; }
+    a { display: block; margin-top: 10px; color: #4CAF50; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>PARKERZ</header>
+
+  <form onsubmit="signup(event)">
+    <h2>Sign Up</h2>
+    <input type="email" id="signupEmail" placeholder="Email" required>
+    <input type="password" id="signupPassword" placeholder="Create Password" required>
+    <button type="submit">Sign Up</button>
+    <a href="login.html">Already have an account? Login</a>
+  </form>
+
+  <script>
+    function signup(event) {
+      event.preventDefault();
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+      let users = JSON.parse(localStorage.getItem('users')) || [];
+      const exists = users.find(u => u.email === email);
+
+      if (exists) {
+        alert("Email already exists. Please login.");
+        window.location.href = 'login.html';
+      } else {
+        users.push({ email, password });
+        localStorage.setItem('users', JSON.stringify(users));
+        window.location.href = 'location.html';
+      }
+    }
+  </script>
+</body>
+</html>
